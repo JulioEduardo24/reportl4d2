@@ -24,10 +24,16 @@ export async function Navbar() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between gap-2">
-        <Link href="/" className="flex shrink-0 items-center gap-2 font-bold text-lg">
-          <Biohazard className="h-6 w-6 text-primary" />
-          <span className="hidden sm:inline">ReportL4D2</span>
-        </Link>
+        {/* Left: hamburger + logo */}
+        <div className="flex items-center gap-2">
+          <MobileNav isAdmin={!!profile?.is_admin} />
+          <Link href="/" className="flex shrink-0 items-center gap-2 font-bold text-lg">
+            <Biohazard className="h-6 w-6 text-primary" />
+            <span className="hidden sm:inline">ReportL4D2</span>
+          </Link>
+        </div>
+
+        {/* Center: desktop nav */}
         <nav className="hidden items-center gap-2 md:flex">
           <Button asChild variant="ghost">
             <Link href="/">Reportes</Link>
@@ -41,8 +47,9 @@ export async function Navbar() {
             </Button>
           )}
         </nav>
+
+        {/* Right: theme + user */}
         <div className="flex items-center gap-2">
-          <MobileNav isAdmin={!!profile?.is_admin} />
           <ThemeToggle />
           {profile ? (
             <UserMenu personaName={profile.persona_name} avatarUrl={profile.avatar_url} />
