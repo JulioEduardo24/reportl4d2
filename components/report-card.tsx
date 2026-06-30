@@ -14,6 +14,7 @@ export interface ReportRow {
   reason: string;
   status: string;
   created_at: string;
+  reporter_steam_id: string;
   reporter?: { persona_name: string; avatar_url: string | null } | null;
   reported_profile?: { persona_name: string; avatar_url: string | null } | null;
 }
@@ -46,7 +47,11 @@ export function ReportCard({ report }: { report: ReportRow }) {
           </div>
           <p className="text-sm text-muted-foreground line-clamp-2">{report.reason}</p>
           <p className="text-xs text-muted-foreground">
-            Reportado por {report.reporter?.persona_name ?? "un usuario"} ·{" "}
+            Reportado por{" "}
+            <Link href={`/players/${report.reporter_steam_id}`} className="hover:underline">
+              {report.reporter?.persona_name ?? "un usuario"}
+            </Link>{" "}
+            ·{" "}
             {formatDistanceToNow(new Date(report.created_at), { addSuffix: true, locale: es })}
           </p>
         </div>

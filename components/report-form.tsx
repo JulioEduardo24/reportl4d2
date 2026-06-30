@@ -39,10 +39,14 @@ export function ReportForm() {
 
   const steamInput = watch("steamInput");
 
-  // Se autogenera el usuario de steam dx
   React.useEffect(() => {
-    if (steamInput && /^\d{17}$/.test(steamInput.trim())) {
-      setValue("profileUrl", `https://steamcommunity.com/profiles/${steamInput.trim()}`);
+    const val = steamInput?.trim() ?? "";
+    if (/^\d{17}$/.test(val)) {
+      setValue("profileUrl", `https://steamcommunity.com/profiles/${val}`);
+    } else if (/^https?:\/\/(www\.)?steamcommunity\.com\/(id|profiles)\/\S+/.test(val)) {
+      setValue("profileUrl", val);
+    } else {
+      setValue("profileUrl", "");
     }
   }, [steamInput, setValue]);
 
@@ -56,6 +60,7 @@ export function ReportForm() {
         setServerError(data.error ?? "Ocurrió un error.");
         return;
       }
+      router.refresh();
       router.push(`/players/${data.reportedSteamId}`);
     } finally {
       setSubmitting(false);
@@ -84,7 +89,7 @@ export function ReportForm() {
 
           <div className="space-y-2">
             <Label htmlFor="profileUrl">Link de Steam (autogenerado, opcional)</Label>
-            <Input id="profileUrl" placeholder="Se completa automáticamente" {...register("profileUrl")} />
+            <Input id="profileUrl" placeholder="Se completa automáticamente" readOnly {...register("profileUrl")} />
           </div>
 
           <div className="space-y-2">

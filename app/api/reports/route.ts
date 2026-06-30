@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSessionSteamId } from "@/lib/session";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -74,6 +75,9 @@ export async function POST(request: NextRequest) {
   } catch (e) {
     console.log("No se pudo refrescar el perfil de Steam del reportado:", e);
   }
+
+  revalidatePath("/");
+  revalidatePath(`/players/${reportedSteamId}`);
 
   return NextResponse.json({ ok: true, reportedSteamId });
 }

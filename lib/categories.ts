@@ -1,6 +1,6 @@
 export const REPORT_CATEGORIES = [
   { value: "cheating", label: "Trampas / Cheats" },
-  { value: "troll", label: "Troll / Jhordan/Shiro" },
+  { value: "troll", label: "Jhordan/Shiro" },
   { value: "other", label: "Otro" },
 ] as const;
 
