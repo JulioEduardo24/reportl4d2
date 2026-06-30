@@ -22,6 +22,7 @@ import type { ReportRow } from "@/components/report-card";
 export function AdminReportRow({ report }: { report: ReportRow }) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
+  const isResolved = report.status === "reviewed" || report.status === "dismissed";
 
   async function setStatus(status: string) {
     setLoading(true);
@@ -46,17 +47,17 @@ export function AdminReportRow({ report }: { report: ReportRow }) {
           </Link>
           <Badge variant="secondary">{categoryLabel(report.category)}</Badge>
           <Badge variant={report.status === "dismissed" ? "outline" : report.status === "reviewed" ? "default" : "secondary"}>
-            {report.status}
+            {report.status === "reviewed" ? "Revisado" : report.status === "dismissed" ? "Descartado" : "Pendiente"}
           </Badge>
         </div>
         <p className="text-sm">{report.reason}</p>
         <p className="text-xs text-muted-foreground">Reportado por {report.reporter?.persona_name ?? "un usuario"}</p>
 
         <div className="flex flex-wrap gap-2 pt-2">
-          <Button size="sm" variant="outline" disabled={loading} onClick={() => setStatus("reviewed")}>
+          <Button size="sm" variant="outline" disabled={loading || isResolved} onClick={() => setStatus("reviewed")}>
             Marcar revisado
           </Button>
-          <Button size="sm" variant="outline" disabled={loading} onClick={() => setStatus("dismissed")}>
+          <Button size="sm" variant="outline" disabled={loading || isResolved} onClick={() => setStatus("dismissed")}>
             Descartar
           </Button>
           <AlertDialog>

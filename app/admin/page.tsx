@@ -1,9 +1,11 @@
 export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { createServiceClient } from "@/lib/supabase/server";
 import { AdminReportRow } from "@/components/admin-report-row";
+import { Button } from "@/components/ui/button";
 import type { ReportRow } from "@/components/report-card";
 
 export default async function AdminPage({
@@ -40,11 +42,34 @@ export default async function AdminPage({
 
   const enriched = rows.map((r) => ({ ...r, reported_profile: profilesById[r.reported_steam_id] ?? null }));
 
+  const currentStatus = searchParams.status ?? "all";
+  const filters = [
+    { label: "Todos", value: "all" },
+    { label: "Pendientes", value: "pending" },
+    { label: "Revisados", value: "reviewed" },
+    { label: "Descartados", value: "dismissed" },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Panel de moderación</h1>
         <p className="text-muted-foreground">Revisa, valida o elimina reportes falsos o spam.</p>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {filters.map((f) => (
+          <Button
+            key={f.value}
+            asChild
+            size="sm"
+            variant={currentStatus === f.value ? "default" : "outline"}
+          >
+            <Link href={f.value === "all" ? "/admin" : `/admin?status=${f.value}`}>
+              {f.label}
+            </Link>
+          </Button>
+        ))}
       </div>
 
       {enriched.length === 0 ? (
