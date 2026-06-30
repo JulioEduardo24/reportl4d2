@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
   }
 
   revalidatePath("/");
-  revalidatePath(`/players/${reportedSteamId}`);
+  revalidatePath("/players", "layout");
 
   return NextResponse.json({ ok: true, reportedSteamId });
 }

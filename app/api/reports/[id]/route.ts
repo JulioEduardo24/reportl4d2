@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
 import { createServiceClient } from "@/lib/supabase/server";
 
@@ -16,6 +17,10 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   const { error } = await supabase.from("reports").update({ status }).eq("id", params.id);
   if (error) return NextResponse.json({ error: "No se pudo actualizar." }, { status: 500 });
 
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/players", "layout");
+
   return NextResponse.json({ ok: true });
 }
 
@@ -26,6 +31,10 @@ export async function DELETE(_request: NextRequest, { params }: { params: { id: 
   const supabase = createServiceClient();
   const { error } = await supabase.from("reports").delete().eq("id", params.id);
   if (error) return NextResponse.json({ error: "No se pudo eliminar." }, { status: 500 });
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/players", "layout");
 
   return NextResponse.json({ ok: true });
 }
