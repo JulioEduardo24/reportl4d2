@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { AutoRefresh } from "@/components/auto-refresh";
 import { Footer } from "@/components/footer";
+import { ChatWrapper } from "@/components/chat-wrapper";
 
 // Avoid Next.js caching the Supabase reads (session/profile, reports feed)
 // across requests — this app's data changes constantly and must always be
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main className="container flex-1 py-8">{children}</main>
           <Footer />
+          <ChatWrapper />
         </ThemeProvider>
       </body>
     </html>
