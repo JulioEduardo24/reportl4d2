@@ -30,6 +30,7 @@ export function LiveChat({ currentSteamId }: Props) {
   const [input, setInput] = React.useState("");
   const [sending, setSending] = React.useState(false);
   const bottomRef = React.useRef<HTMLDivElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
   const supabase = React.useMemo(() => createClient(), []);
 
   React.useEffect(() => {
@@ -53,7 +54,8 @@ export function LiveChat({ currentSteamId }: Props) {
   }, [supabase]);
 
   React.useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [messages]);
 
   async function sendMessage(e: React.FormEvent) {
@@ -78,7 +80,7 @@ export function LiveChat({ currentSteamId }: Props) {
       </div>
 
       {/* Messages */}
-      <div className="flex h-72 flex-col overflow-y-auto p-3 gap-0.5">
+      <div ref={listRef} className="flex h-72 flex-col overflow-y-auto p-3 gap-0.5">
         {messages.length === 0 && (
           <p className="m-auto text-xs text-muted-foreground">
             No hay mensajes. ¡Sé el primero!
