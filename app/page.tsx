@@ -2,9 +2,11 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { createServiceClient } from "@/lib/supabase/server";
+import { getSessionSteamId } from "@/lib/session";
 import { ReportCard, type ReportRow } from "@/components/report-card";
 import { SearchFilterBar } from "@/components/search-filter-bar";
 import { Button } from "@/components/ui/button";
+import { ChatWrapper } from "@/components/chat-wrapper";
 
 const PAGE_SIZE = 10;
 
@@ -51,6 +53,8 @@ export default async function HomePage({
 
   return (
     <div className="space-y-6">
+      <ChatWrapper />
+
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">Reportes recientes</h1>
         <p className="text-muted-foreground">
@@ -87,6 +91,7 @@ export default async function HomePage({
           </Button>
         </div>
       )}
+
     </div>
   );
 }
